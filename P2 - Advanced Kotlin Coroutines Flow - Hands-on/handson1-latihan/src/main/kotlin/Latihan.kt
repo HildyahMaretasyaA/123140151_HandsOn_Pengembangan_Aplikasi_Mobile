@@ -22,7 +22,16 @@ fun main() = runBlocking {
 
     val startTime = System.currentTimeMillis()
 
-    // Kode kamu di sini...
+    val profile = async {
+        fetchUserProfile("123")
+    }
+
+    val posts = async {
+        fetchUserPosts("123")
+    }
+
+    println(profile.await())
+    println("Posts: ${posts.await()}")
 
     val endTime = System.currentTimeMillis()
     println("Waktu: ${endTime - startTime}ms")
