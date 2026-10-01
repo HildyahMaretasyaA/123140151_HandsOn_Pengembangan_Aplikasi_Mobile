@@ -1,5 +1,11 @@
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.runBlocking
 import kotlin.random.Random
 
 // Hands-on 2: Flow dengan Operators
@@ -22,7 +28,16 @@ fun main() = runBlocking {
     // 3. Tampilkan setiap warning dengan collect
 
     temperatureSensor()
-        // .filter { ... }
-        // .map { ... }
-        // .collect { ... }
+        .filter { temp ->
+            temp > 30
+        }
+        .map { temp ->
+            "WARNING: Suhu tinggi terdeteksi: ${temp}°C"
+        }
+        .onEach {
+            println("Processing warning...")
+        }
+        .collect { warning ->
+            println(warning)
+        }
 }
