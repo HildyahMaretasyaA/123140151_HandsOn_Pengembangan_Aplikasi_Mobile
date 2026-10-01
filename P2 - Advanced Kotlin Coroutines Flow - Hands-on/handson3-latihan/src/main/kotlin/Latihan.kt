@@ -1,5 +1,9 @@
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 // Hands-on 3: StateFlow untuk Counter
 // Tugas: Implementasikan counter sederhana menggunakan StateFlow.
@@ -15,36 +19,38 @@ class CounterManager {
     // TODO: Expose sebagai StateFlow (read-only)
     // val count: StateFlow<Int> = ???
 
+    private val _count = MutableStateFlow(0)
+
+    val count: StateFlow<Int> = _count.asStateFlow()
+
     fun increment() {
-        // TODO: Tambah nilai count
+        _count.value++
     }
 
     fun decrement() {
-        // TODO: Kurangi nilai count (minimum 0)
+        if (_count.value > 0) {
+            _count.value--
+        }
     }
 
     fun reset() {
-        // TODO: Reset ke 0
+        _count.value = 0
     }
 }
 
 fun main() = runBlocking {
+
     val counter = CounterManager()
 
     // Collect di background
-    val job = launch {
-        counter.count.collect { println("Count: $it") }
+    launch {
+        counter.count.collect {
+            println("Count: $it")
+        }
     }
 
-    delay(100)
-    counter.increment() // Count: 1
-    delay(100)
-    counter.increment() // Count: 2
-    delay(100)
-    counter.decrement() // Count: 1
-    delay(100)
-    counter.reset()     // Count: 0
-    delay(100)
-
-    job.cancel()
+    counter.increment()
+    counter.increment()
+    counter.decrement()
+    counter.reset()
 }
