@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 
 // Latihan 1: Counter App dengan State (slide P4 hal. 29)
 // Tugas: Buat counter dengan increment, decrement, dan reset.
-//
 // Checklist:
 // [ ] State dengan remember
 // [ ] mutableStateOf(0)
