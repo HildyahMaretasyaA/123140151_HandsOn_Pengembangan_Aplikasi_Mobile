@@ -12,11 +12,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
-// Hands-on 1: NavHost & NavController Dasar
-// Tugas: buat 2 layar ("home" dan "detail") yang dihubungkan dengan
-// NavHost + NavController — dari Home klik tombol untuk pindah ke Detail,
-// dari Detail klik tombol untuk kembali (back stack).
-
 @Composable
 fun Handson1Screen() {
     val navController = rememberNavController()
@@ -25,10 +20,18 @@ fun Handson1Screen() {
     // TODO 2: Di dalamnya, daftarkan composable("home") { HomeScreen(navController) }
     // TODO 3: Daftarkan juga composable("detail") { DetailScreen(navController) }
 
-    Text(
-        "Belum diimplementasikan — lengkapi TODO 1-3 di atas",
-        modifier = Modifier.padding(16.dp)
-    )
+    NavHost(
+        navController = navController,
+        startDestination = "home"
+    ) {
+        composable("home") {
+            HomeScreen(navController)
+        }
+
+        composable("detail") {
+            DetailScreen(navController)
+        }
+    }
 }
 
 @Composable
@@ -37,6 +40,7 @@ private fun HomeScreen(navController: NavHostController) {
         Text("Home Screen")
         Button(onClick = {
             // TODO 4: Navigasi ke "detail" dengan navController.navigate("detail")
+            navController.navigate("detail")
         }) {
             Text("Buka Detail")
         }
@@ -49,6 +53,7 @@ private fun DetailScreen(navController: NavHostController) {
         Text("Detail Screen")
         Button(onClick = {
             // TODO 5: Kembali ke layar sebelumnya dengan navController.popBackStack()
+            navController.popBackStack()
         }) {
             Text("< Kembali")
         }
