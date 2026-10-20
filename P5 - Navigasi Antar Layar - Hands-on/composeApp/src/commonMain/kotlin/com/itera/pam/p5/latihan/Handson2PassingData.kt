@@ -14,10 +14,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 
-// Hands-on 2: Passing Data via Arguments
-// Tugas: dari daftar item di Home, kirim `itemId` sebagai argumen route ke
-// Detail, lalu tampilkan item yang sesuai.
-
 private data class Item(val id: Int, val nama: String)
 
 private val daftarItem = listOf(
@@ -40,10 +36,26 @@ fun Handson2Screen() {
     //             DetailItemScreen(navController, itemId)
     //         }
 
-    Text(
-        "Belum diimplementasikan — lengkapi TODO 1-3 di atas",
-        modifier = Modifier.padding(16.dp)
-    )
+    NavHost(
+        navController = navController,
+        startDestination = "home"
+    ) {
+        composable("home") {
+            HomeListScreen(navController)
+        }
+
+        composable(
+            route = "detail/{itemId}",
+            arguments = listOf(
+                navArgument("itemId") {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getInt("itemId") ?: -1
+            DetailItemScreen(navController, itemId)
+        }
+    }
 }
 
 @Composable
@@ -53,6 +65,7 @@ private fun HomeListScreen(navController: NavHostController) {
         daftarItem.forEach { item ->
             Button(onClick = {
                 // TODO 4: navController.navigate("detail/${item.id}")
+                navController.navigate("detail/${item.id}")
             }) {
                 Text(item.nama)
             }
